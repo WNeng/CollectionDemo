@@ -1,0 +1,340 @@
+package com.collection.demo.order;
+
+import com.alibaba.fastjson.JSON;
+import com.collection.demo.constant.Constants;
+import com.collection.demo.pojo.ApiObjKey;
+import com.collection.demo.pojo.OrderRequest;
+import com.collection.demo.utils.SignUtil;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
+
+import java.io.*;
+import java.util.*;
+
+/**
+ * @author wangwn
+ * @date 2019-06-20.
+ */
+@Service
+public class OrderService {
+
+
+    /**
+     * 获取刷新token
+     */
+    public void getToken() {
+
+        Map<String, String> paramMap = new HashMap();
+        paramMap.put("appId", Constants.APP_ID);
+        paramMap.put("timestampStr", SignUtil.getTimeStampStr());
+
+        try {
+            String sign = SignUtil.createSign(paramMap, Constants.APP_KEY, true);
+            paramMap.put("sign", sign);
+            postForToken(Constants.GET_TOKEN, paramMap);
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * 通过订单号查询订单信息
+     *
+     * @param orderNo
+     */
+    public void getOrderByOrderNo(String orderNo, String token) {
+
+        Map<String, String> paramMap = new HashMap();
+        paramMap.put("appId", Constants.APP_ID);
+        paramMap.put("orderNo", orderNo);
+        paramMap.put("timestampStr", SignUtil.getTimeStampStr());
+
+        try {
+            String sign = SignUtil.createSign(paramMap, Constants.APP_KEY, true);
+            paramMap.put("sign", sign);
+            postForObject(Constants.GET_ORDER_BY_ORDER_NO, token, paramMap);
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * 获取催收对象文件
+     *
+     * @param orderNo
+     * @param objNo
+     * @param token
+     */
+    public void getCollectObj(String orderNo, String objNo, String token) {
+
+        Map<String, String> paramMap = new HashMap();
+        paramMap.put("appId", Constants.APP_ID);
+        paramMap.put("orderNo", orderNo);
+        paramMap.put("objNo", objNo);
+        paramMap.put("timestampStr", SignUtil.getTimeStampStr());
+
+        try {
+            String sign = SignUtil.createSign(paramMap, Constants.APP_KEY, true);
+            paramMap.put("sign", sign);
+            postForEntity(Constants.COLLECTION_OBJ_URL, token, paramMap);
+
+
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * 获取订单列表
+     * @param pageNumber
+     * @param pageSize
+     * @param createDateStart
+     * @param createDateEnd
+     */
+    public void queryOrderList(int pageNumber, int pageSize, String createDateStart, String createDateEnd, String token){
+
+        Map<String, String> paramMap = new HashMap();
+        paramMap.put("appId", Constants.APP_ID);
+        paramMap.put("pageNumber", String.valueOf(pageNumber));
+        paramMap.put("pageSize", String.valueOf(pageSize));
+        paramMap.put("createDateStart", createDateStart);
+        paramMap.put("createDateEnd", createDateEnd);
+        paramMap.put("timestampStr", SignUtil.getTimeStampStr());
+
+        try {
+            String sign = SignUtil.createSign(paramMap, Constants.APP_KEY, true);
+            paramMap.put("sign", sign);
+            postForObject(Constants.GET_ORDER_LIST_URL, token, paramMap);
+
+
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * 获取订单列表
+     * @param orderData
+     */
+    public void createOrder(String orderData, String token){
+
+        Map<String, String> paramMap = new HashMap();
+        paramMap.put("appId", Constants.APP_ID);
+        paramMap.put("orderData", orderData);
+        paramMap.put("timestampStr", SignUtil.getTimeStampStr());
+
+        try {
+            String sign = SignUtil.createSign(paramMap, Constants.APP_KEY, true);
+            paramMap.put("sign", sign);
+            postForObject(Constants.CREATE_ORDER_URL, token, paramMap);
+
+
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public String postForToken(String url, Map paramsMap) {
+        return postForObject(url, null, paramsMap);
+    }
+
+
+    public String postForObject(String url, String token, Map paramsMap) {
+
+        RestTemplate restTemplate = new RestTemplate();
+        MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
+        postParameters.setAll(paramsMap);
+        HttpHeaders headers = new HttpHeaders();
+        if (!StringUtils.isEmpty(token)) {
+            headers.add("token", token);
+        }
+        System.out.println("请求参数 = " + paramsMap.toString());
+        HttpEntity<MultiValueMap<String, Object>> paramsEntiry = new HttpEntity<>(postParameters, headers);
+        String data = restTemplate.postForObject(url, paramsEntiry, String.class);
+        System.out.println("返回的数据 = " + data);
+        return data;
+    }
+
+    public String postForEntity(String url, String token, Map paramsMap) throws IOException {
+
+        RestTemplate restTemplate = new RestTemplate();
+        MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
+        postParameters.setAll(paramsMap);
+        HttpHeaders headers = new HttpHeaders();
+        if (!StringUtils.isEmpty(token)) {
+            headers.add("token", token);
+        }
+        System.out.println("请求参数 = " + paramsMap.toString());
+        HttpEntity<MultiValueMap<String, Object>> paramsEntiry = new HttpEntity<>(postParameters, headers);
+        ResponseEntity<Resource> entity = restTemplate.postForEntity(url, paramsEntiry, Resource.class);
+        OutputStream outputStream = null;
+        InputStream in = null;
+        if (entity.getStatusCode().equals(HttpStatus.OK)) {
+
+            try {
+                in = entity.getBody().getInputStream();
+
+                //地址自行更换本地地址
+                File file = new File("/Users/wneng/fcy/home/files/test3.pdf");
+                if (!file.exists()) {
+                    file.createNewFile();
+                }
+
+                outputStream = new FileOutputStream(file);
+                int len = 0;
+                byte[] buf = new byte[1024];
+                while ((len = in.read(buf, 0, 1024)) != -1) {
+                    outputStream.write(buf, 0, len);
+                }
+                outputStream.flush();
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+
+                if (in != null) {
+                    in.close();
+                }
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            }
+
+        }
+
+        return null;
+    }
+
+
+    public static void main(String[] args) throws UnsupportedEncodingException {
+
+
+        OrderService orderService = new OrderService();
+
+        //获取token
+//        orderService.getToken();
+
+        //获取订单信息
+        String orderNo = "190624220950835";
+//        String token = "525d8e62bbc44bc29aebc2807e3f64cf";
+        String token = "a12a7621ed3a4908a5408f88e5516e6f";
+        orderService.getOrderByOrderNo(orderNo, token);
+
+
+        //获取催收对象律师函
+        String objNo = "2c9276ed6b6ae9f7016b73c1bd040027";
+//        orderService.getCollectObj(orderNo, objNo, token);
+
+
+        //获取订单列表
+        int pageNumber = 1;
+        int pagerSize = 11;
+        //订单创建时间起始，字符串，格式必须为：yyyy-MM-dd
+        String createDateStart = "2019-06-20";
+        String createDateEnd = "2019-06-20";
+//        orderService.queryOrderList(pageNumber, pagerSize, createDateStart, createDateEnd, token);
+
+
+
+//        Map<String, String> paramMap = new HashMap();
+//        paramMap.put("appId", Constants.APP_ID);
+//        paramMap.put("pageNumber", String.valueOf(1));
+//        paramMap.put("pageSize", String.valueOf(10));
+//        paramMap.put("createDateStart", "2019-06-20");
+//        paramMap.put("createDateEnd", "2019-06-20");
+//        paramMap.put("timestampStr", "1561100331");
+//        String sign = SignUtil.createSign(paramMap, Constants.APP_KEY, true);
+
+
+
+        /**
+         * createOrder
+         */
+        List<ApiObjKey> keyList = new ArrayList<>();
+        //这个5个字段是固定的，必须上传
+        keyList.add(new ApiObjKey("objName", "发函对象"));
+        keyList.add(new ApiObjKey("objIdNbr", "证件号码"));
+        keyList.add(new ApiObjKey("address", "联系地址"));
+        keyList.add(new ApiObjKey("tel", "手机号码"));
+        keyList.add(new ApiObjKey("email", "电子邮箱"));
+        keyList.add(new ApiObjKey("loanNo", "借款合同编号"));
+        keyList.add(new ApiObjKey("loanName", "借款合同名称"));
+        keyList.add(new ApiObjKey("lucnName", "出借人"));
+        keyList.add(new ApiObjKey("loanAmount", "借款本金"));
+        keyList.add(new ApiObjKey("loanBet", "年化利率"));
+        keyList.add(new ApiObjKey("loanStartDate", "出借日期"));
+        keyList.add(new ApiObjKey("loanEndDate", "到期日期"));
+        keyList.add(new ApiObjKey("endAmount", "逾期金额"));
+        keyList.add(new ApiObjKey("bankCert", "凭证文件名"));
+
+        List<Map<String, Object>> details = new LinkedList<>();
+
+        for (int i = 0; i < keyList.size(); i++) {
+
+            Map<String, Object> objMap = new HashMap<>();
+            objMap.put("objName", "王大胆" + i);
+            objMap.put("objIdNbr", "3503535" + i);
+            objMap.put("address", "福建厦门湖里区");
+            objMap.put("tel", "18950493760");
+            objMap.put("email", "fj25822@qq.com");
+            objMap.put("loanNo", String.valueOf(2019062456 + i));
+            objMap.put("loanName", "借款合同");
+            objMap.put("lucnName", "王大胆");
+            objMap.put("loanAmount", "10000" + i);
+            objMap.put("loanBet", "12%");
+            objMap.put("loanStartDate", "20180624");
+            objMap.put("loanEndDate", "20190624");
+            objMap.put("endAmount", "5000" + i);
+            objMap.put("bankCert", "银行凭证" + i + ".jpg");
+
+            details.add(objMap);
+
+        }
+
+        OrderRequest orderRequest = new OrderRequest();
+        //暂时默认提供模版id
+        orderRequest.setDefaultTplId("2c9276ed6b84de88016b89a264390038");
+        orderRequest.setKeyList(keyList);
+        orderRequest.setDetails(details);
+        String jsonString = JSON.toJSONString(orderRequest);
+//        System.out.println(jsonString);
+
+//        orderService.createOrder(jsonString, token);
+
+
+
+
+
+
+
+    }
+
+
+}
