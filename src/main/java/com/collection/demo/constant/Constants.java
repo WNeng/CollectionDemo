@@ -18,8 +18,8 @@ public interface Constants {
     /**
      * api地址
      */
-//    String BASE_URL = "http://localhost:8600";
-    String BASE_URL = "http://openapi.collectioncloud.cn";
+    String BASE_URL = "http://localhost:8600";
+//    String BASE_URL = "http://openapi.collectioncloud.cn";
 
 //    String BASE_URL = "http://120.77.145.89:8601";
 
