@@ -34,6 +34,11 @@ public interface Constants {
     String CREATE_ORDER_URL = BASE_URL + "/order/createOrder";
 
     /**
+     * 上传凭证文件
+     */
+    String UPLOAD_BANK_CERT_URL = BASE_URL + "/order/uploadBankCert";
+
+    /**
      * 订单查询，返回订单基本信息和状态信息
      */
     String GET_ORDER_BY_ORDER_NO = BASE_URL + "/order/getOrderByOrderNo";
@@ -49,6 +54,9 @@ public interface Constants {
      * 订单列表查询
      */
     String GET_ORDER_LIST_URL = BASE_URL + "/order/queryOrderList";
+
+
+
 
 
 

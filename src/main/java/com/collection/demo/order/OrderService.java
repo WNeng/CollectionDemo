@@ -2,20 +2,18 @@ package com.collection.demo.order;
 
 import com.alibaba.fastjson.JSON;
 import com.collection.demo.constant.Constants;
-import com.collection.demo.pojo.ApiObjKey;
-import com.collection.demo.pojo.OrderRequest;
+import com.collection.demo.pojo.*;
 import com.collection.demo.utils.SignUtil;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.util.StringUtils;
+import org.springframework.util.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.*;
@@ -27,7 +25,8 @@ import java.util.*;
 @Service
 public class OrderService {
 
-
+    @Value("${spring.fileupload.destination}")
+    private String destination;
     /**
      * 获取刷新token
      */
@@ -160,6 +159,61 @@ public class OrderService {
 
     }
 
+    /**
+     * 上传凭证文件
+     * @param orderNo
+     * @param bankCert
+     * @param token
+     */
+    public String uploadBankCert(String orderNo, BankCert bankCert, String token) throws IOException {
+
+        Map<String, Object> paramMap = new HashMap();
+        paramMap.put("appId", Constants.APP_ID);
+        paramMap.put("orderNo", orderNo);
+        paramMap.put("timestampStr", SignUtil.getTimeStampStr());
+
+        MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
+        postParameters.setAll(paramMap);
+
+        // 保存临时文件
+        List<String> tempList = new ArrayList<>();
+
+        if (bankCert != null) {
+
+
+            for (BankCertBean cert : bankCert.getBankCerts()) {
+
+                MultipartFile file = cert.getBankCertFile();
+                createDir(destination);
+                String tempFilePath = destination + File.separator + file.getOriginalFilename();
+
+                try {
+                    // create local temp file
+                    FileCopyUtils.copy(file.getInputStream(), new FileOutputStream(tempFilePath));
+                    tempList.add(tempFilePath);
+                    // MultipartFile 直接转 FileSystemResource是不行的
+                    // 把临时文件变成FileSystemResource
+                    FileSystemResource resource = new FileSystemResource(tempFilePath);
+                    // LinkedMultiValueMap中，key对应的value值其实是一个LinkedList，所以可以一直往同一个key中add值，不会覆盖
+                    postParameters.add("files", resource);
+                } catch (Exception e) {
+                    System.out.println("保存文件" + file.getOriginalFilename() + "至本地临时文件异常!");
+                }
+
+            }
+
+        }else{
+            System.out.println("bankCert is null");
+        }
+
+        String data = postForFile(Constants.UPLOAD_BANK_CERT_URL, token, postParameters);
+
+        // delete local temp file
+        deleteLocalTempFiles(tempList);
+
+        return data;
+    }
+
 
     public String postForToken(String url, Map paramsMap) {
         return postForObject(url, null, paramsMap);
@@ -180,6 +234,41 @@ public class OrderService {
         String data = restTemplate.postForObject(url, paramsEntiry, String.class);
         System.out.println("返回的数据 = " + data);
         return data;
+    }
+
+
+    public String postForFile(String url, String token, MultiValueMap<String, Object> postParameters) {
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        if (!StringUtils.isEmpty(token)) {
+            headers.add("token", token);
+        }
+        headers.setContentType(MediaType.parseMediaType("multipart/form-data;charset=UTF-8"));
+
+        System.out.println("请求参数 = " + postParameters.toString());
+        HttpEntity<MultiValueMap<String, Object>> paramsEntiry = new HttpEntity<>(postParameters, headers);
+
+        String data = restTemplate.postForObject(url, paramsEntiry, String.class);
+        System.out.println("返回的数据 = " + data);
+
+        return data;
+    }
+
+    private void deleteLocalTempFiles(List<String> tempList) {
+        if (!CollectionUtils.isEmpty(tempList)) {
+            for (String fileName : tempList) {
+                new File(fileName).delete();
+            }
+        }
+    }
+
+    private void createDir(String tempPath) {
+        File file = new File(tempPath);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
     }
 
     public String postForEntity(String url, String token, Map paramsMap) throws IOException {
@@ -246,7 +335,7 @@ public class OrderService {
         String orderNo = "190624220950835";
 //        String token = "525d8e62bbc44bc29aebc2807e3f64cf";
         String token = "a12a7621ed3a4908a5408f88e5516e6f";
-        orderService.getOrderByOrderNo(orderNo, token);
+//        orderService.getOrderByOrderNo(orderNo, token);
 
 
         //获取催收对象律师函
@@ -325,9 +414,9 @@ public class OrderService {
         orderRequest.setKeyList(keyList);
         orderRequest.setDetails(details);
         String jsonString = JSON.toJSONString(orderRequest);
-//        System.out.println(jsonString);
+        System.out.println(jsonString);
 
-//        orderService.createOrder(jsonString, token);
+        orderService.createOrder(jsonString, token);
 
 
 
