@@ -332,10 +332,10 @@ public class OrderService {
 //        orderService.getToken();
 
         //获取订单信息
-        String orderNo = "190624220950835";
+        String orderNo = "190702165130634";
 //        String token = "525d8e62bbc44bc29aebc2807e3f64cf";
         String token = "a12a7621ed3a4908a5408f88e5516e6f";
-//        orderService.getOrderByOrderNo(orderNo, token);
+        orderService.getOrderByOrderNo(orderNo, token);
 
 
         //获取催收对象律师函
@@ -346,9 +346,9 @@ public class OrderService {
         //获取订单列表
         int pageNumber = 1;
         int pagerSize = 11;
-        //订单创建时间起始，字符串，格式必须为：yyyy-MM-dd
-        String createDateStart = "2019-06-20";
-        String createDateEnd = "2019-06-20";
+        //订单创建时间起始，字符串，格式必须为：yyyy年MM月dd日
+        String createDateStart = "2019年06月20日";
+        String createDateEnd = "2019年06月20日";
 //        orderService.queryOrderList(pageNumber, pagerSize, createDateStart, createDateEnd, token);
 
 
@@ -414,9 +414,9 @@ public class OrderService {
         orderRequest.setKeyList(keyList);
         orderRequest.setDetails(details);
         String jsonString = JSON.toJSONString(orderRequest);
-        System.out.println(jsonString);
-
-        orderService.createOrder(jsonString, token);
+//        System.out.println(jsonString);
+//
+//        orderService.createOrder(jsonString, token);
 
 
 
