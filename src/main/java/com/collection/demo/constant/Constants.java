@@ -55,6 +55,11 @@ public interface Constants {
      */
     String GET_ORDER_LIST_URL = BASE_URL + "/order/queryOrderList";
 
+    /**
+     * 获取催收模版列表
+     */
+    String GET_COLLECTION_TPL_LIST_URL = BASE_URL + "/order/queryCollectionTplList";
+
 
 
 

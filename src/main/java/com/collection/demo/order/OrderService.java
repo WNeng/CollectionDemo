@@ -133,6 +133,34 @@ public class OrderService {
     }
 
     /**
+     * 获取创建的催收模版列表
+     * @param pageNumber
+     * @param pageSize
+     */
+    public void queryCollectionTplList(int pageNumber, int pageSize, String token){
+
+        Map<String, String> paramMap = new HashMap();
+        paramMap.put("appId", Constants.APP_ID);
+        paramMap.put("pageNumber", String.valueOf(pageNumber));
+        paramMap.put("pageSize", String.valueOf(pageSize));
+        paramMap.put("timestampStr", SignUtil.getTimeStampStr());
+
+        try {
+            String sign = SignUtil.createSign(paramMap, Constants.APP_KEY, true);
+            paramMap.put("sign", sign);
+            postForObject(Constants.GET_COLLECTION_TPL_LIST_URL, token, paramMap);
+
+
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
      * 创建订单
      * @param orderData
      * @param token
@@ -334,8 +362,8 @@ public class OrderService {
         //获取订单信息
         String orderNo = "190702165130634";
 //        String token = "525d8e62bbc44bc29aebc2807e3f64cf";
-        String token = "a12a7621ed3a4908a5408f88e5516e6f";
-        orderService.getOrderByOrderNo(orderNo, token);
+        String token = "fcc84e78c1684d67a3cf691ef8614ab1";
+//        orderService.getOrderByOrderNo(orderNo, token);
 
 
         //获取催收对象律师函
@@ -351,6 +379,7 @@ public class OrderService {
         String createDateEnd = "2019年06月20日";
 //        orderService.queryOrderList(pageNumber, pagerSize, createDateStart, createDateEnd, token);
 
+        orderService.queryCollectionTplList(pageNumber, pagerSize, token);
 
 
 //        Map<String, String> paramMap = new HashMap();
@@ -408,15 +437,19 @@ public class OrderService {
 
         }
 
-        OrderRequest orderRequest = new OrderRequest();
-        //暂时默认提供模版id
-        orderRequest.setDefaultTplId("2c9276ed6b84de88016b89a264390038");
-        orderRequest.setKeyList(keyList);
-        orderRequest.setDetails(details);
-        String jsonString = JSON.toJSONString(orderRequest);
+//        OrderRequest orderRequest = new OrderRequest();
+//        //暂时默认提供模版id
+//        orderRequest.setDefaultTplId("2c9276ed6b84de88016b89a264390038");
+//        orderRequest.setKeyList(keyList);
+//        orderRequest.setDetails(details);
+//        String jsonString = JSON.toJSONString(orderRequest);
 //        System.out.println(jsonString);
 //
 //        orderService.createOrder(jsonString, token);
+
+
+
+
 
 
 
