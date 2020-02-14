@@ -9,11 +9,13 @@ public interface Constants {
      * appid,由法催云提供
      */
     String APP_ID = "610005";
+//    String APP_ID = "830002";
 
     /**
      * appkey,生成签名密钥，由法催云提供
      */
-    String APP_KEY = "cc986db9c19e49229f81848ce4f1781d";
+//    String APP_KEY = "70814e78eb7546d8943383389cebbd5d";
+    String APP_KEY = "20f530f063974f1da713925665fab13d";
 
     /**
      * api地址
@@ -21,7 +23,7 @@ public interface Constants {
     String BASE_URL = "http://localhost:8600";
 //    String BASE_URL = "http://openapi.collectioncloud.cn";
 
-//    String BASE_URL = "http://120.77.145.89:8601";
+//    String BASE_URL = "http://119.23.151.166:8601";
 
     /**
      * 获取刷新token
@@ -32,6 +34,11 @@ public interface Constants {
      * 创建订单
      */
     String CREATE_ORDER_URL = BASE_URL + "/order/createOrder";
+
+    /**
+     * 创建订单--订单数据AES加密
+     */
+    String CREATE_ORDER_AES_URL = BASE_URL + "/order/createOrderBySecret";
 
     /**
      * 上传凭证文件

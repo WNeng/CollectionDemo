@@ -3,6 +3,7 @@ package com.collection.demo.order;
 import com.alibaba.fastjson.JSON;
 import com.collection.demo.constant.Constants;
 import com.collection.demo.pojo.*;
+import com.collection.demo.utils.SecurityUtils;
 import com.collection.demo.utils.SignUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
@@ -148,6 +149,7 @@ public class OrderService {
         try {
             String sign = SignUtil.createSign(paramMap, Constants.APP_KEY, true);
             paramMap.put("sign", sign);
+            System.out.println(paramMap.toString());
             postForObject(Constants.GET_COLLECTION_TPL_LIST_URL, token, paramMap);
 
 
@@ -186,6 +188,37 @@ public class OrderService {
         }
 
     }
+
+
+    /**
+     * 创建订单
+     * @param orderData
+     * @param token
+     */
+    public void createOrderBySecret(String orderData, String token){
+
+        Map<String, String> paramMap = new HashMap();
+        paramMap.put("appId", Constants.APP_ID);
+        paramMap.put("orderData", orderData);
+        paramMap.put("timestampStr", SignUtil.getTimeStampStr());
+
+        try {
+            String sign = SignUtil.createSign(paramMap, Constants.APP_KEY, true);
+            paramMap.put("sign", sign);
+            postForObject(Constants.CREATE_ORDER_AES_URL, token, paramMap);
+
+
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
 
     /**
      * 上传凭证文件
@@ -319,7 +352,7 @@ public class OrderService {
                 in = entity.getBody().getInputStream();
 
                 //地址自行更换本地地址
-                File file = new File("/Users/wneng/fcy/home/files/test3.pdf");
+                File file = new File("/Users/wneng/fcy/home/files/test7.pdf");
                 if (!file.exists()) {
                     file.createNewFile();
                 }
@@ -360,14 +393,14 @@ public class OrderService {
 //        orderService.getToken();
 
         //获取订单信息
-        String orderNo = "190702165130634";
-//        String token = "525d8e62bbc44bc29aebc2807e3f64cf";
-        String token = "fcc84e78c1684d67a3cf691ef8614ab1";
+//        String orderNo = "190926103800103";
+        String token = "3a5c6c9bec45431190236108c4753e59";
+//        String token = "4a54416915f345f3a61eda677a15c2ce";
 //        orderService.getOrderByOrderNo(orderNo, token);
 
 
         //获取催收对象律师函
-        String objNo = "2c9276ed6b6ae9f7016b73c1bd040027";
+//        String objNo = "2c9276ed6d6877e5016d6b6eb4455996";
 //        orderService.getCollectObj(orderNo, objNo, token);
 
 
@@ -379,7 +412,7 @@ public class OrderService {
         String createDateEnd = "2019年06月20日";
 //        orderService.queryOrderList(pageNumber, pagerSize, createDateStart, createDateEnd, token);
 
-        orderService.queryCollectionTplList(pageNumber, pagerSize, token);
+//        orderService.queryCollectionTplList(pageNumber, pagerSize, token);
 
 
 //        Map<String, String> paramMap = new HashMap();
@@ -419,13 +452,13 @@ public class OrderService {
 
             Map<String, Object> objMap = new HashMap<>();
             objMap.put("objName", "王大胆" + i);
-            objMap.put("objIdNbr", "3503535" + i);
+            objMap.put("objIdNbr", "350424199001101617");
             objMap.put("address", "福建厦门湖里区");
             objMap.put("tel", "18950493760");
             objMap.put("email", "fj25822@qq.com");
             objMap.put("loanNo", String.valueOf(2019062456 + i));
             objMap.put("loanName", "借款合同");
-            objMap.put("lucnName", "王大胆");
+            objMap.put("lucnName", "龙行虎步");
             objMap.put("loanAmount", "10000" + i);
             objMap.put("loanBet", "12%");
             objMap.put("loanStartDate", "20180624");
@@ -437,16 +470,27 @@ public class OrderService {
 
         }
 
-//        OrderRequest orderRequest = new OrderRequest();
-//        //暂时默认提供模版id
-//        orderRequest.setDefaultTplId("2c9276ed6b84de88016b89a264390038");
-//        orderRequest.setKeyList(keyList);
-//        orderRequest.setDetails(details);
-//        String jsonString = JSON.toJSONString(orderRequest);
-//        System.out.println(jsonString);
-//
+        OrderRequest orderRequest = new OrderRequest();
+        //暂时默认提供模版id
+        orderRequest.setDefaultTplId("2c9276ed6b84de88016b89a264390038");
+        orderRequest.setKeyList(keyList);
+        orderRequest.setDetails(details);
+        String jsonString = JSON.toJSONString(orderRequest);
+        System.out.println(jsonString);
+
 //        orderService.createOrder(jsonString, token);
 
+        // 加密订单数据生成订单
+        String encrypt = SecurityUtils.encrypt(jsonString, Constants.APP_KEY);
+        orderService.createOrderBySecret(encrypt, token);
+
+
+//        System.out.println(isNumber("1000"));
+//        System.out.println(isNumber("242525.252636"));
+//        System.out.println(isNumber("242525.252636.9596"));
+//        System.out.println(isNumber("200535.243"));
+//        System.out.println(isNumber("200535"));
+//        System.out.println(isNumber("中午"));
 
 
 
@@ -456,7 +500,12 @@ public class OrderService {
 
 
 
+    }
 
+
+    public static boolean isNumber(String str){
+        String reg = "^[0-9]+(.[0-9]+)?$";
+        return str.matches(reg);
     }
 
 
