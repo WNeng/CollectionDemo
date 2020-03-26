@@ -5,6 +5,8 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * AES加解密
@@ -100,6 +102,11 @@ public class SecurityUtils {
         System.out.println("加密后的16进制密文:" + encrypt);
         String decrypt = decrypt(encrypt, password);
         System.out.println("解密后的内容：" + decrypt);
+        List<String> list = new ArrayList<>();
+        while(true){
+
+            list.add(new SecurityUtils().toString());
+        }
     }
 
 }

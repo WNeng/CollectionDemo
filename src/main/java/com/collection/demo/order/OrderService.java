@@ -394,7 +394,7 @@ public class OrderService {
 
         //获取订单信息
 //        String orderNo = "190926103800103";
-        String token = "3a5c6c9bec45431190236108c4753e59";
+        String token = "a27815228177427192f845bf952c102f";
 //        String token = "4a54416915f345f3a61eda677a15c2ce";
 //        orderService.getOrderByOrderNo(orderNo, token);
 
@@ -407,10 +407,10 @@ public class OrderService {
         //获取订单列表
         int pageNumber = 1;
         int pagerSize = 11;
-        //订单创建时间起始，字符串，格式必须为：yyyy年MM月dd日
-        String createDateStart = "2019年06月20日";
-        String createDateEnd = "2019年06月20日";
-//        orderService.queryOrderList(pageNumber, pagerSize, createDateStart, createDateEnd, token);
+        //订单创建时间起始，字符串，格式必须为：yyyy-MM-dd
+        String createDateStart = "2019-06-20";
+        String createDateEnd = "2019-09-20";
+        orderService.queryOrderList(pageNumber, pagerSize, createDateStart, createDateEnd, token);
 
 //        orderService.queryCollectionTplList(pageNumber, pagerSize, token);
 
@@ -469,20 +469,20 @@ public class OrderService {
             details.add(objMap);
 
         }
-
-        OrderRequest orderRequest = new OrderRequest();
-        //暂时默认提供模版id
-        orderRequest.setDefaultTplId("2c9276ed6b84de88016b89a264390038");
-        orderRequest.setKeyList(keyList);
-        orderRequest.setDetails(details);
-        String jsonString = JSON.toJSONString(orderRequest);
-        System.out.println(jsonString);
-
-//        orderService.createOrder(jsonString, token);
-
-        // 加密订单数据生成订单
-        String encrypt = SecurityUtils.encrypt(jsonString, Constants.APP_KEY);
-        orderService.createOrderBySecret(encrypt, token);
+//
+//        OrderRequest orderRequest = new OrderRequest();
+//        //暂时默认提供模版id
+//        orderRequest.setDefaultTplId("2c9276ed6b84de88016b89a264390038");
+//        orderRequest.setKeyList(keyList);
+//        orderRequest.setDetails(details);
+//        String jsonString = JSON.toJSONString(orderRequest);
+//        System.out.println(jsonString);
+//
+////        orderService.createOrder(jsonString, token);
+//
+//        // 加密订单数据生成订单
+//        String encrypt = SecurityUtils.encrypt(jsonString, Constants.APP_KEY);
+//        orderService.createOrderBySecret(encrypt, token);
 
 
 //        System.out.println(isNumber("1000"));
