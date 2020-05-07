@@ -163,6 +163,38 @@ public class OrderService {
     }
 
     /**
+     * 获取发函报告列表
+     * @param pageNumber
+     * @param pageSize
+     * @param createDateStart
+     * @param createDateEnd
+     */
+    public void queryCollectionObjReport(int pageNumber, int pageSize, String createDateStart, String createDateEnd, String token){
+
+        Map<String, String> paramMap = new HashMap();
+        paramMap.put("appId", Constants.APP_ID);
+        paramMap.put("pageNumber", String.valueOf(pageNumber));
+        paramMap.put("pageSize", String.valueOf(pageSize));
+        paramMap.put("createDateStart", createDateStart);
+        paramMap.put("createDateEnd", createDateEnd);
+        paramMap.put("timestampStr", SignUtil.getTimeStampStr());
+
+        try {
+            String sign = SignUtil.createSign(paramMap, Constants.APP_KEY, true);
+            paramMap.put("sign", sign);
+            postForObject(Constants.COLLECTION_OBJ_REPORT_LIST_URL, token, paramMap);
+
+
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
      * 创建订单
      * @param orderData
      * @param token
@@ -394,7 +426,7 @@ public class OrderService {
 
         //获取订单信息
 //        String orderNo = "190926103800103";
-        String token = "a27815228177427192f845bf952c102f";
+        String token = "5574864967e541cfb824d2150c25e858";
 //        String token = "4a54416915f345f3a61eda677a15c2ce";
 //        orderService.getOrderByOrderNo(orderNo, token);
 
@@ -408,9 +440,12 @@ public class OrderService {
         int pageNumber = 1;
         int pagerSize = 11;
         //订单创建时间起始，字符串，格式必须为：yyyy-MM-dd
-        String createDateStart = "2019-06-20";
-        String createDateEnd = "2019-09-20";
-        orderService.queryOrderList(pageNumber, pagerSize, createDateStart, createDateEnd, token);
+        String createDateStart = "2020-01-01";
+        String createDateEnd = "2020-04-20";
+
+//        orderService.queryOrderList(pageNumber, pagerSize, createDateStart, createDateEnd, token);
+        // 获取发函报告列表
+        orderService.queryCollectionObjReport(pageNumber, pagerSize, createDateStart, createDateEnd, token);
 
 //        orderService.queryCollectionTplList(pageNumber, pagerSize, token);
 
