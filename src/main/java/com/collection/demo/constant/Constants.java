@@ -9,21 +9,20 @@ public interface Constants {
      * appid,由法催云提供
      */
     String APP_ID = "610005";
-//    String APP_ID = "830002";
+
 
     /**
      * appkey,生成签名密钥，由法催云提供
      */
-//    String APP_KEY = "70814e78eb7546d8943383389cebbd5d";
     String APP_KEY = "20f530f063974f1da713925665fab13d";
 
     /**
      * api地址
      */
-    String BASE_URL = "http://localhost:8600";
+//    String BASE_URL = "http://localhost:8600";
 //    String BASE_URL = "http://openapi.collectioncloud.cn";
 
-//    String BASE_URL = "http://119.23.151.166:8601";
+    String BASE_URL = "http://testapi.collectioncloud.top";
 
     /**
      * 获取刷新token

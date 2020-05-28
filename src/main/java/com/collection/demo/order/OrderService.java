@@ -422,11 +422,10 @@ public class OrderService {
         OrderService orderService = new OrderService();
 
         //获取token
-//        orderService.getToken();
+        orderService.getToken();
 
         //获取订单信息
 //        String orderNo = "190926103800103";
-        String token = "5574864967e541cfb824d2150c25e858";
 //        String token = "4a54416915f345f3a61eda677a15c2ce";
 //        orderService.getOrderByOrderNo(orderNo, token);
 
@@ -441,11 +440,11 @@ public class OrderService {
         int pagerSize = 11;
         //订单创建时间起始，字符串，格式必须为：yyyy-MM-dd
         String createDateStart = "2020-01-01";
-        String createDateEnd = "2020-04-20";
+        String createDateEnd = "2020-05-27";
 
 //        orderService.queryOrderList(pageNumber, pagerSize, createDateStart, createDateEnd, token);
         // 获取发函报告列表
-        orderService.queryCollectionObjReport(pageNumber, pagerSize, createDateStart, createDateEnd, token);
+//        orderService.queryCollectionObjReport(pageNumber, pagerSize, createDateStart, createDateEnd, token);
 
 //        orderService.queryCollectionTplList(pageNumber, pagerSize, token);
 
@@ -473,7 +472,7 @@ public class OrderService {
         keyList.add(new ApiObjKey("email", "电子邮箱"));
         keyList.add(new ApiObjKey("loanNo", "借款合同编号"));
         keyList.add(new ApiObjKey("loanName", "借款合同名称"));
-        keyList.add(new ApiObjKey("lucnName", "出借人"));
+        keyList.add(new ApiObjKey("lucnName", "委托人"));
         keyList.add(new ApiObjKey("loanAmount", "借款本金"));
         keyList.add(new ApiObjKey("loanBet", "年化利率"));
         keyList.add(new ApiObjKey("loanStartDate", "出借日期"));
@@ -483,7 +482,7 @@ public class OrderService {
 
         List<Map<String, Object>> details = new LinkedList<>();
 
-        for (int i = 0; i < keyList.size(); i++) {
+        for (int i = 0; i < 1; i++) {
 
             Map<String, Object> objMap = new HashMap<>();
             objMap.put("objName", "王大胆" + i);
@@ -506,8 +505,9 @@ public class OrderService {
         }
 //
 //        OrderRequest orderRequest = new OrderRequest();
-//        //暂时默认提供模版id
-//        orderRequest.setDefaultTplId("2c9276ed6b84de88016b89a264390038");
+        //暂时默认提供模版id
+//        orderRequest.setDefaultTplId("2c92775b71108764017110d80bd00017");
+//        orderRequest.setDefaultTplId("2c9276ed6bb2ea39016bb2f5250f0013");
 //        orderRequest.setKeyList(keyList);
 //        orderRequest.setDetails(details);
 //        String jsonString = JSON.toJSONString(orderRequest);

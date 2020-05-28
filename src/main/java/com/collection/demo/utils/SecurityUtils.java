@@ -95,18 +95,10 @@ public class SecurityUtils {
     }
 
     public static void main(String[] args) throws Exception {
-        String content = "dashen_大神";
-        String password = "dashen";
-        System.out.println("需要加密的内容：" + content);
-        String encrypt = encrypt(content, password);
-        System.out.println("加密后的16进制密文:" + encrypt);
-        String decrypt = decrypt(encrypt, password);
-        System.out.println("解密后的内容：" + decrypt);
-        List<String> list = new ArrayList<>();
-        while(true){
+        String str = "";
 
-            list.add(new SecurityUtils().toString());
-        }
+        String key = "015693df9dee43ceaa7ba32a94a6e28b";
+        System.out.println(decrypt(str, key));
     }
 
 }
