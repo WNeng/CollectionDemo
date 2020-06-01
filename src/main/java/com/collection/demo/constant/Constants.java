@@ -22,7 +22,7 @@ public interface Constants {
 //    String BASE_URL = "http://localhost:8600";
 //    String BASE_URL = "http://openapi.collectioncloud.cn";
 
-    String BASE_URL = "http://testapi.collectioncloud.top";
+    String BASE_URL = "http://testopen.collectioncloud.cn";
 
     /**
      * 获取刷新token
