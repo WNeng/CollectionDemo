@@ -260,7 +260,7 @@ public class ApiService {
 
         ApiService apiService = new ApiService();
         // 1. 获取token
-//        apiService.testToken(apiService);
+        apiService.testToken(apiService);
 
         String token = "979247c2a1c04bf1991ba5777156450f";
         // 2. 获取模版列表
