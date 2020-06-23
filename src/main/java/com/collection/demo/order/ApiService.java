@@ -8,8 +8,10 @@ import com.collection.demo.pojo.OrderRequest;
 import com.collection.demo.utils.SecurityUtils;
 import com.collection.demo.utils.SignUtil;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -26,6 +28,10 @@ import java.util.*;
  */
 @Service
 public class ApiService {
+
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     /**
      * 获取刷新token
@@ -242,7 +248,10 @@ public class ApiService {
 
     public String postForObject(String url, String token, Map paramsMap) {
 
-        RestTemplate restTemplate = new RestTemplate();
+
+//        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+//        factory.setBufferRequestBody(false);
+//        RestTemplate restTemplate = new RestTemplate(factory);
         MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
         postParameters.setAll(paramsMap);
         HttpHeaders headers = new HttpHeaders();
@@ -260,7 +269,7 @@ public class ApiService {
 
         ApiService apiService = new ApiService();
         // 1. 获取token
-        apiService.testToken(apiService);
+//        apiService.testToken(apiService);
 
         String token = "979247c2a1c04bf1991ba5777156450f";
         // 2. 获取模版列表
@@ -269,7 +278,7 @@ public class ApiService {
         String defaultTplId = "2c9276ed6b84de88016b89a264390038";
         // 3. 创建订单
         // {"code":0,"data":{"fail":0,"total":1,"orderNo":"200612180054299","failMap":{},"success":1},"message":"SUCCESS"}
-//        apiService.testCreateOrder(apiService, defaultTplId, token);
+        apiService.testCreateOrder(apiService, defaultTplId, token);
 
         // 4. 获取创建订单失败数据
 //        apiService.testQryFailObjList(apiService, token);
@@ -280,7 +289,7 @@ public class ApiService {
         // 7. 已还款用户标记
 //        apiService.testUpdateRepaidStatus(apiService, token);
         // 8. 按合同编号查询发函对象报表数据
-        apiService.testQueryObjByLoanNo(apiService, token);
+//        apiService.testQueryObjByLoanNo(apiService, token);
 
 
 
@@ -322,7 +331,7 @@ public class ApiService {
      * 3. 创建订单测试
      * @param apiService
      */
-    private void testCreateOrder(ApiService apiService, String defaultTplId, String token){
+    public void testCreateOrder(ApiService apiService, String defaultTplId, String token){
 
         /**
          * createOrder
@@ -346,7 +355,7 @@ public class ApiService {
 
         List<Map<String, Object>> details = new LinkedList<>();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 3000; i++) {
 
             Map<String, Object> objMap = new HashMap<>();
             objMap.put("objName", "王大胆" + i);
@@ -437,7 +446,7 @@ public class ApiService {
      * @param token
      */
     private void testQueryObjByLoanNo(ApiService apiService, String token){
-        String loanNo = "2019062460";
+        String loanNo = "2020061330";
         apiService.queryObjByLoanNo(loanNo, token);
     }
 

@@ -1,9 +1,11 @@
 package com.collection.demo;
 
 import com.collection.demo.constant.Constants;
+import com.collection.demo.order.ApiService;
 import com.collection.demo.utils.SignUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +22,8 @@ import java.util.Map;
 @SpringBootTest
 public class DemoApplicationTests {
 
+    @Autowired
+    ApiService apiService;
     @Test
     public void contextLoads() {
 
@@ -54,5 +58,15 @@ public class DemoApplicationTests {
 
 
 
+    }
+
+    @Test
+    public void testCreateOrder(){
+        String token = "979247c2a1c04bf1991ba5777156450f";
+        // 2. 获取模版列表
+//        apiService.testCollectionTplList(apiService, token);
+        // 模版ID
+        String defaultTplId = "2c9276ed6b84de88016b89a264390038";
+        apiService.testCreateOrder(apiService, defaultTplId, token);
     }
 }

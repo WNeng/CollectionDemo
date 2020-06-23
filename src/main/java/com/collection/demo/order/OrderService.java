@@ -422,11 +422,11 @@ public class OrderService {
         OrderService orderService = new OrderService();
 
         //获取token
-        orderService.getToken();
+//        orderService.getToken();
 
         //获取订单信息
 //        String orderNo = "190926103800103";
-//        String token = "4a54416915f345f3a61eda677a15c2ce";
+        String token = "04f04a98bb9842fbbdc987eb8ecbecda";
 //        orderService.getOrderByOrderNo(orderNo, token);
 
 
@@ -482,7 +482,7 @@ public class OrderService {
 
         List<Map<String, Object>> details = new LinkedList<>();
 
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 10; i++) {
 
             Map<String, Object> objMap = new HashMap<>();
             objMap.put("objName", "王大胆" + i);
@@ -504,16 +504,15 @@ public class OrderService {
 
         }
 //
-//        OrderRequest orderRequest = new OrderRequest();
+        OrderRequest orderRequest = new OrderRequest();
         //暂时默认提供模版id
-//        orderRequest.setDefaultTplId("2c92775b71108764017110d80bd00017");
-//        orderRequest.setDefaultTplId("2c9276ed6bb2ea39016bb2f5250f0013");
-//        orderRequest.setKeyList(keyList);
-//        orderRequest.setDetails(details);
-//        String jsonString = JSON.toJSONString(orderRequest);
-//        System.out.println(jsonString);
+        orderRequest.setDefaultTplId("2c9276ed6b84de88016b89a264390038");
+        orderRequest.setKeyList(keyList);
+        orderRequest.setDetails(details);
+        String jsonString = JSON.toJSONString(orderRequest);
+        System.out.println(jsonString);
 //
-////        orderService.createOrder(jsonString, token);
+        orderService.createOrder(jsonString, token);
 //
 //        // 加密订单数据生成订单
 //        String encrypt = SecurityUtils.encrypt(jsonString, Constants.APP_KEY);

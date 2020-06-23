@@ -9,6 +9,7 @@ public interface Constants {
      * appid,由法催云提供
      */
     String APP_ID = "610005";
+//    String APP_ID = "830011";
 
 
     /**
@@ -19,10 +20,10 @@ public interface Constants {
     /**
      * api地址
      */
-    String BASE_URL = "http://localhost:8600";
+//    String BASE_URL = "http://localhost:8600";
 //    String BASE_URL = "http://openapi.collectioncloud.cn";
 
-//    String BASE_URL = "http://testopen.collectioncloud.cn";
+    String BASE_URL = "http://testopen.collectioncloud.cn";
 
     /**
      * 获取刷新token
