@@ -62,11 +62,11 @@ public class DemoApplicationTests {
 
     @Test
     public void testCreateOrder(){
-        String token = "979247c2a1c04bf1991ba5777156450f";
+        String token = "a6b308526d854668b729ea544d2de1b3";
         // 2. 获取模版列表
 //        apiService.testCollectionTplList(apiService, token);
         // 模版ID
-        String defaultTplId = "2c9276ed6b84de88016b89a264390038";
+        String defaultTplId = "2c92775c72ad36ef0172ad3988890004";
         apiService.testCreateOrder(apiService, defaultTplId, token);
     }
 }

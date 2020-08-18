@@ -169,13 +169,24 @@ public class EmailCompletionUtil {
         return Pattern.matches(regex, input);
     }
 
+    /**
+     * 区号+座机号码+分机号码
+     * @param fixedPhone
+     * @return
+     */
+    public static boolean isFixedPhone(String fixedPhone){
+        String reg="(?:(\\(\\+?86\\))(0[0-9]{2,3}\\-?)?([2-9][0-9]{6,7})+(\\-[0-9]{1,4})?)|" +
+                "(?:(86-?)?(0[0-9]{2,3}\\-?)?([2-9][0-9]{6,7})+(\\-[0-9]{1,4})?)";
+        return Pattern.matches(reg, fixedPhone);
+    }
+
 
     public static void main(String[] args) {
 
 
-        System.out.println(EmailCompletionUtil.isChinaMobilePhoneNum("18950493760"));
-        System.out.println(EmailCompletionUtil.isChinaTelecomPhoneNum("18950493760"));
-        System.out.println(EmailCompletionUtil.isChinaUnicomPhoneNum("18950493760"));
+//        System.out.println(EmailCompletionUtil.isChinaMobilePhoneNum("18950493760"));
+//        System.out.println(EmailCompletionUtil.isChinaTelecomPhoneNum("18950493760"));
+        System.out.println(isFixedPhone("95439209"));
 
 
     }

@@ -8,22 +8,24 @@ public interface Constants {
     /**
      * appid,由法催云提供
      */
-    String APP_ID = "610005";
-//    String APP_ID = "830011";
+//    String APP_ID = "610005";
+    String APP_ID = "830002";
 
 
     /**
      * appkey,生成签名密钥，由法催云提供
      */
-    String APP_KEY = "20f530f063974f1da713925665fab13d";
+//    String APP_KEY = "20f530f063974f1da713925665fab13d";
+    String APP_KEY = "4b5b64a863e44d0cb15ba41425dc34ae";
 
     /**
      * api地址
      */
 //    String BASE_URL = "http://localhost:8600";
-//    String BASE_URL = "http://openapi.collectioncloud.cn";
+//    String BASE_URL = "https://openapi.collectioncloud.cn";
 
     String BASE_URL = "http://testopen.collectioncloud.cn";
+//    String BASE_URL = "http://120.77.3.193:8601";
 
     /**
      * 获取刷新token

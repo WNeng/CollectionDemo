@@ -18,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @author wangwn
@@ -425,9 +427,9 @@ public class OrderService {
 //        orderService.getToken();
 
         //获取订单信息
-//        String orderNo = "190926103800103";
-        String token = "04f04a98bb9842fbbdc987eb8ecbecda";
-//        orderService.getOrderByOrderNo(orderNo, token);
+        String orderNo = "200707230012423";
+        String token = "f651102825e14c43b935f326bff3fc15";
+        orderService.getOrderByOrderNo(orderNo, token);
 
 
         //获取催收对象律师函
@@ -446,7 +448,24 @@ public class OrderService {
         // 获取发函报告列表
 //        orderService.queryCollectionObjReport(pageNumber, pagerSize, createDateStart, createDateEnd, token);
 
-//        orderService.queryCollectionTplList(pageNumber, pagerSize, token);
+
+//        ExecutorService executorService = Executors.newFixedThreadPool(20);
+//
+//        for (int i = 0; i < 20000 ; i++) {
+//
+//            try {
+//                Thread.sleep(1);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            executorService.execute(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                    orderService.queryCollectionTplList(pageNumber, pagerSize, token);
+//                }
+//            });
+//        }
 
 
 //        Map<String, String> paramMap = new HashMap();
@@ -504,15 +523,15 @@ public class OrderService {
 
         }
 //
-        OrderRequest orderRequest = new OrderRequest();
-        //暂时默认提供模版id
-        orderRequest.setDefaultTplId("2c9276ed6b84de88016b89a264390038");
-        orderRequest.setKeyList(keyList);
-        orderRequest.setDetails(details);
-        String jsonString = JSON.toJSONString(orderRequest);
-        System.out.println(jsonString);
-//
-        orderService.createOrder(jsonString, token);
+//        OrderRequest orderRequest = new OrderRequest();
+//        //暂时默认提供模版id
+//        orderRequest.setDefaultTplId("2c92775c72ad36ef0172ad3988890004");
+//        orderRequest.setKeyList(keyList);
+//        orderRequest.setDetails(details);
+//        String jsonString = JSON.toJSONString(orderRequest);
+//        System.out.println(jsonString);
+////
+//        orderService.createOrder(jsonString, token);
 //
 //        // 加密订单数据生成订单
 //        String encrypt = SecurityUtils.encrypt(jsonString, Constants.APP_KEY);

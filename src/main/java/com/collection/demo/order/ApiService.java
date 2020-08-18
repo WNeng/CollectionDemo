@@ -70,7 +70,7 @@ public class ApiService {
             String sign = SignUtil.createSign(paramMap, Constants.APP_KEY, true);
             paramMap.put("sign", sign);
             System.out.println(paramMap.toString());
-            postForObject(Constants.GET_COLLECTION_TPL_LIST_URL, token, paramMap);
+            postForObject(Api.QUERY_TPL_LIST, token, paramMap);
 
 
 
@@ -241,6 +241,30 @@ public class ApiService {
 
     }
 
+    /**
+     * 按合同编号发起语音通知
+     * @param loanNo
+     */
+    public void voiceNotificationByLoanNo(String loanNo, String token){
+
+        Map<String, String> paramMap = new HashMap();
+        paramMap.put("appId", Constants.APP_ID);
+        paramMap.put("loanNo", loanNo);
+        paramMap.put("timestampStr", SignUtil.getTimeStampStr());
+
+        try {
+            String sign = SignUtil.createSign(paramMap, Constants.APP_KEY, true);
+            paramMap.put("sign", sign);
+            postForObject(Api.VOICE_NOTIFY_BY_LOANNO, token, paramMap);
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     public String postForToken(String url, Map paramsMap) {
         return postForObject(url, null, paramsMap);
@@ -248,7 +272,7 @@ public class ApiService {
 
     public String postForObject(String url, String token, Map paramsMap) {
 
-
+        RestTemplate restTemplate = new RestTemplate();
 //        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
 //        factory.setBufferRequestBody(false);
 //        RestTemplate restTemplate = new RestTemplate(factory);
@@ -271,14 +295,20 @@ public class ApiService {
         // 1. 获取token
 //        apiService.testToken(apiService);
 
-        String token = "979247c2a1c04bf1991ba5777156450f";
+        String token = "4344cdad5f3e40daae3c50c84b8d4773";
         // 2. 获取模版列表
 //        apiService.testCollectionTplList(apiService, token);
         // 模版ID
-        String defaultTplId = "2c9276ed6b84de88016b89a264390038";
+//        String defaultTplId = "2c9276ed6b84de88016b89a264390038";
+        String defaultTplId = "2c92775b73f10ddd0173f15a3608001b";
         // 3. 创建订单
         // {"code":0,"data":{"fail":0,"total":1,"orderNo":"200612180054299","failMap":{},"success":1},"message":"SUCCESS"}
-        apiService.testCreateOrder(apiService, defaultTplId, token);
+//        for (int i = 0; i < 1000; i++) {
+//
+//            apiService.testCreateOrder(apiService, defaultTplId, token);
+//        }
+
+
 
         // 4. 获取创建订单失败数据
 //        apiService.testQryFailObjList(apiService, token);
@@ -290,7 +320,8 @@ public class ApiService {
 //        apiService.testUpdateRepaidStatus(apiService, token);
         // 8. 按合同编号查询发函对象报表数据
 //        apiService.testQueryObjByLoanNo(apiService, token);
-
+        // 9. 按合同编号发起语音通知
+        apiService.testVoiceObjByLoanNo(apiService, token);
 
 
 
@@ -343,38 +374,49 @@ public class ApiService {
         keyList.add(new ApiObjKey("address", "联系地址"));
         keyList.add(new ApiObjKey("tel", "手机号码"));
         keyList.add(new ApiObjKey("email", "电子邮箱"));
-        keyList.add(new ApiObjKey("loanNo", "借款合同编号"));
-        keyList.add(new ApiObjKey("loanName", "借款合同名称"));
+        keyList.add(new ApiObjKey("loanNo", "合同编号"));
+//        keyList.add(new ApiObjKey("loanName", "借款合同名称"));
         keyList.add(new ApiObjKey("lucnName", "委托人"));
-        keyList.add(new ApiObjKey("loanAmount", "借款本金"));
-        keyList.add(new ApiObjKey("loanBet", "年化利率"));
-        keyList.add(new ApiObjKey("loanStartDate", "出借日期"));
-        keyList.add(new ApiObjKey("loanEndDate", "到期日期"));
+//        keyList.add(new ApiObjKey("loanAmount", "借款本金"));
+//        keyList.add(new ApiObjKey("loanBet", "年化利率"));
+//        keyList.add(new ApiObjKey("loanStartDate", "出借日期"));
+        keyList.add(new ApiObjKey("loanEndDate", "数据提取日期"));
+        keyList.add(new ApiObjKey("phone", "还款联系电话"));
         keyList.add(new ApiObjKey("endAmount", "逾期金额"));
         keyList.add(new ApiObjKey("bankCert", "凭证文件名"));
 
         List<Map<String, Object>> details = new LinkedList<>();
 
-        for (int i = 0; i < 3000; i++) {
+        for (int i = 0; i < 1; i++) {
 
             Map<String, Object> objMap = new HashMap<>();
             objMap.put("objName", "王大胆" + i);
             objMap.put("objIdNbr", "350424199001101617");
             objMap.put("address", "福建厦门湖里区");
             objMap.put("tel", "18950493760");
+//            if (i == 0) {
+//                objMap.put("tel", "95187");
+//            }else if (i == 1){
+//                objMap.put("tel", "4006695566");
+//            } else if (i == 2) {
+//                objMap.put("tel", "0592-96166");
+//            }else{
+//                objMap.put("tel", "51722737");
+//            }
             objMap.put("email", "fj25822@qq.com");
             objMap.put("loanNo", String.valueOf(2019062456 + i));
-            objMap.put("loanName", "借款合同");
-            objMap.put("lucnName", "龙行虎步");
-            objMap.put("loanAmount", "10000" + i);
-            if (i == 8) {
-                objMap.put("loanBet", "40%");
-            }else{
-                objMap.put("loanBet", "12%");
-            }
-            objMap.put("loanStartDate", "2019-06-24");
+//            objMap.put("loanName", "借款合同");
+            objMap.put("lucnName", "宿迁云瀚信息科技有限公司");
+//            objMap.put("loanAmount", "10000" + i);
+//            if (i == 8) {
+//                objMap.put("loanBet", "40%");
+//            }else{
+//                objMap.put("loanBet", "12%");
+//            }
+//            objMap.put("loanStartDate", "2019-06-24");
             objMap.put("loanEndDate", "2020-06-13");
             objMap.put("endAmount", "5000" + i);
+            objMap.put("phone", "0592-2181777");
             objMap.put("bankCert", "银行凭证" + i + ".jpg");
 
             details.add(objMap);
@@ -446,8 +488,18 @@ public class ApiService {
      * @param token
      */
     private void testQueryObjByLoanNo(ApiService apiService, String token){
-        String loanNo = "2020061330";
+        String loanNo = "2019062456";
         apiService.queryObjByLoanNo(loanNo, token);
+    }
+
+    /**
+     * 9. 按合同编号查询发函对象报表数据
+     * @param apiService
+     * @param token
+     */
+    private void testVoiceObjByLoanNo(ApiService apiService, String token){
+        String loanNo = "5_18509234256795023536";
+        apiService.voiceNotificationByLoanNo(loanNo, token);
     }
 
 }
