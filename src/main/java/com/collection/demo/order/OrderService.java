@@ -22,9 +22,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
+ * 已废弃，请使用ApiService中的接口
  * @author wangwn
  * @date 2019-06-20.
  */
+@Deprecated
 @Service
 public class OrderService {
 
