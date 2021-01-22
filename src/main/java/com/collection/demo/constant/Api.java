@@ -11,9 +11,9 @@ public interface Api {
      * api地址
      */
 //    String BASE_URL = "http://localhost:8600";
-    String BASE_URL = "https://openapi.collectioncloud.cn";
+//    String BASE_URL = "https://openapi.collectioncloud.cn";
 
-//    String BASE_URL = "http://testopen.collectioncloud.cn";
+    String BASE_URL = "http://testopen.collectioncloud.cn";
 //    String BASE_URL = "http://120.77.3.193:8601";
     /**
      * 获取刷新token

@@ -424,12 +424,12 @@ public class OrderService {
         OrderService orderService = new OrderService();
 
         //获取token
-//        orderService.getToken();
+        orderService.getToken();
 
         //获取订单信息
-        String orderNo = "200707230012423";
-        String token = "f651102825e14c43b935f326bff3fc15";
-        orderService.getOrderByOrderNo(orderNo, token);
+//        String orderNo = "200707230012423";
+        String token = "bfb141b2e471437bb6861783fa9576ee";
+//        orderService.getOrderByOrderNo(orderNo, token);
 
 
         //获取催收对象律师函
@@ -504,7 +504,7 @@ public class OrderService {
         for (int i = 0; i < 10; i++) {
 
             Map<String, Object> objMap = new HashMap<>();
-            objMap.put("objName", "王大胆" + i);
+            objMap.put("objName", "王大胆");
             objMap.put("objIdNbr", "350424199001101617");
             objMap.put("address", "福建厦门湖里区");
             objMap.put("tel", "18950493760");
@@ -523,13 +523,13 @@ public class OrderService {
 
         }
 //
-//        OrderRequest orderRequest = new OrderRequest();
-//        //暂时默认提供模版id
-//        orderRequest.setDefaultTplId("2c92775c72ad36ef0172ad3988890004");
-//        orderRequest.setKeyList(keyList);
-//        orderRequest.setDetails(details);
-//        String jsonString = JSON.toJSONString(orderRequest);
-//        System.out.println(jsonString);
+        OrderRequest orderRequest = new OrderRequest();
+        //暂时默认提供模版id
+        orderRequest.setDefaultTplId("2c9276ed6b84de88016b89a264390038");
+        orderRequest.setKeyList(keyList);
+        orderRequest.setDetails(details);
+        String jsonString = JSON.toJSONString(orderRequest);
+        System.out.println(jsonString);
 ////
 //        orderService.createOrder(jsonString, token);
 //

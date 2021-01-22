@@ -62,7 +62,7 @@ public class DemoApplicationTests {
 
     @Test
     public void testCreateOrder(){
-        String token = "a6b308526d854668b729ea544d2de1b3";
+        String token = "ab1de682068b49da9987b7735effb284";
         // 2. 获取模版列表
 //        apiService.testCollectionTplList(apiService, token);
         // 模版ID
